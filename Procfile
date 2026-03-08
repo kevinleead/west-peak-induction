@@ -1,0 +1,1 @@
+web: gunicorn west_peak_induction_app:app
