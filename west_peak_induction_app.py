@@ -133,6 +133,8 @@ def write_temp_image(base64_data: str, path: Path) -> Path:
     path.write_bytes(raw)
     return path
 
+
+
 def upload_to_drive(file_path, file_name):
     import json
     from google.oauth2 import service_account
