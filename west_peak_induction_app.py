@@ -133,6 +133,36 @@ def write_temp_image(base64_data: str, path: Path) -> Path:
     path.write_bytes(raw)
     return path
 
+def upload_to_drive(file_path, file_name):
+    import json
+    from google.oauth2 import service_account
+    from googleapiclient.discovery import build
+    from googleapiclient.http import MediaFileUpload
+
+    creds_dict = json.loads(os.environ["GOOGLE_CREDENTIALS"])
+
+    credentials = service_account.Credentials.from_service_account_info(
+        creds_dict,
+        scopes=["https://www.googleapis.com/auth/drive"]
+    )
+
+    drive_service = build("drive", "v3", credentials=credentials)
+
+    folder_id = "1RymqcvXVYAZc90R-k4JqQ13Lx0ZqtDhJ"
+
+    file_metadata = {
+        "name": file_name,
+        "parents": [folder_id]
+    }
+
+    media = MediaFileUpload(file_path, mimetype="application/pdf")
+
+    drive_service.files().create(
+        body=file_metadata,
+        media_body=media,
+        fields="id"
+    ).execute()
+
 
 def create_pdf(record: dict, payload: dict) -> str:
     safe_name = payload["full_legal_name"].replace(" ", "_")
@@ -207,10 +237,15 @@ def create_pdf(record: dict, payload: dict) -> str:
     y -= 12
     c.drawImage(ImageReader(str(sig_path)), 30, y - 60, width=170, height=60, preserveAspectRatio=True, mask='auto')
 
-    c.save()
-    if os.environ.get("GOOGLE_CREDENTIALS"):
+c.save()
+
+if os.environ.get("GOOGLE_CREDENTIALS"):
+    try:
         upload_to_drive(pdf_path, pdf_name)
-    return pdf_name
+    except Exception as e:
+        print(f"Google Drive upload failed: {e}")
+
+return pdf_name
 
 
 HOME_HTML = """
