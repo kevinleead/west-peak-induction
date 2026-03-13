@@ -27,7 +27,7 @@ DOCS_DIR.mkdir(exist_ok=True)
 
 TITLE = "West Peak Construction Site Induction & SWMS Form V3"
 BASE_URL = os.environ.get("BASE_URL", "http://127.0.0.1:5050")
-SITE_INDUCTION_FILENAME = "SITE INDUCTION & OHS Coordination Plan.pdf"
+SITE_INDUCTION_FILENAME = "SITE INDUCTION.docx"
 WORKING_AT_HEIGHT_FILENAME = "SWMS - Working at Height.doc"
 
 SITES = {
