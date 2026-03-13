@@ -239,15 +239,15 @@ def create_pdf(record: dict, payload: dict) -> str:
     y -= 12
     c.drawImage(ImageReader(str(sig_path)), 30, y - 60, width=170, height=60, preserveAspectRatio=True, mask='auto')
 
-c.save()
+    c.save()
 
-if os.environ.get("GOOGLE_CREDENTIALS"):
-    try:
-        upload_to_drive(pdf_path, pdf_name)
-    except Exception as e:
-        print(f"Google Drive upload failed: {e}")
+    if os.environ.get("GOOGLE_CREDENTIALS"):
+        try:
+            upload_to_drive(pdf_path, pdf_name)
+        except Exception as e:
+            print(f"Google Drive upload failed: {e}")
 
-return pdf_name
+    return pdf_name
 
 
 HOME_HTML = """
